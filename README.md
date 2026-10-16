@@ -16,16 +16,15 @@ This repo is part of a three-repo GitOps setup:
 
 ```
 sample-k8s-argocd-bootstrap
-  └── installs ArgoCD + applies argocd/ (projects, repo credentials)
+  └── installs ArgoCD
+  └── applies core/ (projects + root-app)  ← ONE manual apply, then GitOps takes over
         │
         ▼
     ArgoCD running in-cluster
         │
-        ├── Application: github-personal-hpa-test  ──watches──▶  sample-k8s-app
-        │     deploys nginx Deployment, Service, HPA
-        │
-        └── ApplicationSet: s3-buckets  ──watches──▶  sample-k8s-gitops/apps/{dev,prod}
-              generates one Application per env, deploys Crossplane S3 Buckets
+        └── root app  ──watches──▶  sample-k8s-gitops/argocd/ (recurse)
+              │
+              ├── Applications and ApplicationSet..
 ```
 
 **Bootstrap repo** owns the trust boundary — it defines which repos ArgoCD is allowed to sync from and what each project can deploy. Changes here require operator review.
@@ -81,9 +80,10 @@ bash install/patch-service.sh
 The `core/` directory holds DevOps-managed ArgoCD configuration — things that operators own and developers should not modify directly:
 
 - **projects** — `AppProject` definitions (RBAC boundaries, allowed repos and destinations)
+- **root-app** — App-of-Apps that watches `sample-k8s-gitops/argocd/` and reconciles all Application and ApplicationSet definitions automatically
 - Any other cluster-scoped ArgoCD components (RBAC policies, notifications, etc.)
 
-Apply on initial setup after installation, and re-apply whenever this directory changes:
+Apply once after installation. After this, any Application or ApplicationSet pushed to the gitops repo is picked up automatically — no further manual applies needed:
 
 ```bash
 kubectl apply -R -f core/
@@ -128,4 +128,3 @@ kubectl apply -f install/install.yaml
 | `install/istio-virtualservice.yaml` | Routes `argocd.local.io` → `argocd-server:80` via `istio-system/primary-gateway` |
 | `install/patch-service.sh` | Patches service to LoadBalancer, assigns MetalLB IP, prints admin password |
 | `install/wait-for` | Resource list used by the manifest-installer to wait for ArgoCD readiness before patching |
-| `core/` | DevOps-managed ArgoCD resources (projects, repositories, etc.) — apply with `kubectl apply -R -f core/` |
