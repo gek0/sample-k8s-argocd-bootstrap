@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: github-personal
+  namespace: argocd
+spec:
+  description: Personal GitHub project with various aplications
+
+  sourceRepos:
+  - 'https://github.com/gek0/sample-k8s-app.git'
+
+  destinations:
+  - namespace: 'github-personal-*'
+    name: in-cluster
+
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+
+  orphanedResources:
+    warn: false
+
+  permitOnlyProjectScopedClusters: false

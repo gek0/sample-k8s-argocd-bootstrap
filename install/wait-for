@@ -1,2 +1,2 @@
-service/argocd-server kube-system
-secret/argocd-initial-admin-secret kube-system
+service/argocd-server argocd
+secret/argocd-initial-admin-secret argocd

@@ -78,7 +78,7 @@ bash install/patch-service.sh
 
 ## ArgoCD resources
 
-The `argocd/` directory holds DevOps-managed ArgoCD configuration — things that operators own and developers should not modify directly:
+The `core/` directory holds DevOps-managed ArgoCD configuration — things that operators own and developers should not modify directly:
 
 - **projects** — `AppProject` definitions (RBAC boundaries, allowed repos and destinations)
 - **repositories** — ArgoCD repository credentials and access config
@@ -87,7 +87,7 @@ The `argocd/` directory holds DevOps-managed ArgoCD configuration — things tha
 Apply on initial setup after installation, and re-apply whenever this directory changes:
 
 ```bash
-kubectl apply -R -f argocd/
+kubectl apply -R -f core/
 ```
 
 ## Accessing ArgoCD
