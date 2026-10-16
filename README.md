@@ -2,6 +2,38 @@
 
 Manifests and scripts for installing and managing ArgoCD on the Lima vanilla Kubernetes cluster.
 
+## Related repositories
+
+This repo is part of a three-repo GitOps setup:
+
+| Repository | Purpose | Access |
+|---|---|---|
+| [sample-k8s-argocd-bootstrap](https://github.com/gek0/sample-k8s-argocd-bootstrap) (this repo) | Installs ArgoCD; owns platform-level config (projects, repository credentials, RBAC) | DevOps/operators only |
+| [sample-k8s-gitops](https://github.com/gek0/sample-k8s-gitops) | ArgoCD Application and ApplicationSet definitions; per-environment app manifests | Developers |
+| [sample-k8s-app](https://github.com/gek0/sample-k8s-app) | Kubernetes manifests for the nginx sample application (Deployment, Service, HPA) | Developers |
+
+### How they work together
+
+```
+sample-k8s-argocd-bootstrap
+  └── installs ArgoCD + applies argocd/ (projects, repo credentials)
+        │
+        ▼
+    ArgoCD running in-cluster
+        │
+        ├── Application: github-personal-hpa-test  ──watches──▶  sample-k8s-app
+        │     deploys nginx Deployment, Service, HPA
+        │
+        └── ApplicationSet: s3-buckets  ──watches──▶  sample-k8s-gitops/apps/{dev,prod}
+              generates one Application per env, deploys Crossplane S3 Buckets
+```
+
+**Bootstrap repo** owns the trust boundary — it defines which repos ArgoCD is allowed to sync from and what each project can deploy. Changes here require operator review.
+
+**Gitops repo** is where application teams manage what gets deployed and to which environment. ArgoCD reconciles it continuously.
+
+**App repo** holds the actual workload manifests. ArgoCD watches it and applies changes automatically on every push.
+
 ## Prerequisites
 
 - Running Lima k8s cluster (see [lima-vanilla-k8s](https://github.com/gek0/lima-vanilla-k8s))
