@@ -81,7 +81,6 @@ bash install/patch-service.sh
 The `core/` directory holds DevOps-managed ArgoCD configuration — things that operators own and developers should not modify directly:
 
 - **projects** — `AppProject` definitions (RBAC boundaries, allowed repos and destinations)
-- **repositories** — ArgoCD repository credentials and access config
 - Any other cluster-scoped ArgoCD components (RBAC policies, notifications, etc.)
 
 Apply on initial setup after installation, and re-apply whenever this directory changes:
@@ -129,4 +128,4 @@ kubectl apply -f install/install.yaml
 | `install/istio-virtualservice.yaml` | Routes `argocd.local.io` → `argocd-server:80` via `istio-system/primary-gateway` |
 | `install/patch-service.sh` | Patches service to LoadBalancer, assigns MetalLB IP, prints admin password |
 | `install/wait-for` | Resource list used by the manifest-installer to wait for ArgoCD readiness before patching |
-| `argocd/` | DevOps-managed ArgoCD resources (projects, repositories, etc.) — apply with `kubectl apply -R -f argocd/` |
+| `core/` | DevOps-managed ArgoCD resources (projects, repositories, etc.) — apply with `kubectl apply -R -f core/` |
