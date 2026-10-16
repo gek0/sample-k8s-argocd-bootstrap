@@ -9,15 +9,9 @@ spec:
   sourceRepos:
   - 'https://github.com/gek0/sample-k8s-app.git'
   - 'https://github.com/gek0/sample-k8s-gitops.git'
-  - 'https://grafana.github.io/helm-charts'
-  - 'https://prometheus-community.github.io/helm-charts'
 
   destinations:
   - namespace: 'github-personal-*'
-    name: in-cluster
-  - namespace: argocd
-    name: in-cluster
-  - namespace: monitoring
     name: in-cluster
 
   clusterResourceWhitelist:
