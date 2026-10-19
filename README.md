@@ -95,7 +95,7 @@ kubectl apply -R -f core/
 |---|---|
 | In-cluster (MetalLB) | http://192.168.104.52 |
 | Virtual host (Istio) | http://argocd.local.io |
-| Mac port-forward | http://localhost:8080 (via `port-forward.sh`) |
+| Host port-forward | http://localhost:8080 (via `port-forward.sh`) |
 
 Username: `admin`  
 Password: printed by `patch-service.sh`, or retrieve manually:
