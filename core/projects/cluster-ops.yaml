@@ -14,6 +14,7 @@ spec:
     - 'https://prometheus-community.github.io/helm-charts'
     - 'https://helm.releases.hashicorp.com'
     - 'https://charts.external-secrets.io'
+    - 'https://charts.crossplane.io/stable'
 
   destinations:
     - namespace: '*'
