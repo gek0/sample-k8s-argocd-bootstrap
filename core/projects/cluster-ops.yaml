@@ -15,6 +15,7 @@ spec:
     - 'https://helm.releases.hashicorp.com'
     - 'https://charts.external-secrets.io'
     - 'https://charts.crossplane.io/stable'
+    - 'https://charts.bitnami.com/bitnami'
 
   destinations:
     - namespace: '*'
